@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1123</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTableView" name="tableView"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1123</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuHardware">
+    <property name="title">
+     <string>Hardware</string>
+    </property>
+    <addaction name="actionHardware_Preferences"/>
+   </widget>
+   <widget class="QMenu" name="menuAnimals">
+    <property name="title">
+     <string>Animals</string>
+    </property>
+    <addaction name="actionAnimal_List"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHardware"/>
+   <addaction name="menuAnimals"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionHardware_Preferences">
+   <property name="text">
+    <string>Hardware Preferences</string>
+   </property>
+  </action>
+  <action name="actionAnimal_List">
+   <property name="text">
+    <string>Animal List</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
