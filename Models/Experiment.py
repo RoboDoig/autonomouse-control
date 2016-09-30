@@ -18,11 +18,11 @@ class Mouse:
 
 
 class Schedule:
-    def __init__(self, id):
+    def __init__(self, id, schedule_trials, schedule_headers):
         self.id = id
         self.current_trial = 0
-        self.trial_list = list()
-
+        self.schedule_trials = schedule_trials
+        self.schedule_headers = schedule_headers
 
 class Trial:
     def __init__(self, parameters):

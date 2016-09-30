@@ -1,5 +1,9 @@
+import pickle
+import os
+
 from PyQt5 import QtWidgets, QtGui
 from Designs import animalWindow
+from Models import Experiment
 
 
 class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
@@ -14,6 +18,7 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
         self.addRowButton.clicked.connect(self.add_row)
         self.removeRowButton.clicked.connect(self.remove_row)
         self.actionUpdate.triggered.connect(self.update_animals)
+        self.addScheduleButton.clicked.connect(self.add_schedule)
 
         self.animalTable.selectionModel().selectionChanged.connect(self.animal_selected)
 
@@ -36,6 +41,14 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
             self.animalTable.setItem(a, 0, id)
             self.animalTable.setItem(a, 1, water)
 
+    def current_animal(self):
+        try:
+            row = self.animalTable.selectedIndexes()[0].row()
+            animal = self.parent.experiment.animal_list[self.animalTable.item(row, 0).text()]
+            return animal
+        except:
+            return None
+
     def update_animals(self):
         for row in range(self.animalTable.rowCount()):
             id = self.animalTable.item(row, 0).text()
@@ -44,9 +57,25 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
             self.parent.experiment.add_mouse(id, water)
 
     def animal_selected(self):
-        try:
-            row = self.animalTable.selectedIndexes()[0].row()
-            animal = self.parent.experiment.animal_list[self.animalTable.item(row, 0).text()]
-            print(animal)
-        except:
-            pass
+        animal = self.current_animal()
+        if animal is not None:
+            self.scheduleTable.setRowCount(len(animal.schedule_list))
+            self.scheduleTable.setColumnCount(3)
+
+            for s, schedule in enumerate(animal.schedule_list):
+                sched_name = QtWidgets.QTableWidgetItem(schedule.id)
+                n_trials = QtWidgets.QTableWidgetItem(str(len(schedule.schedule_trials)))
+
+                self.scheduleTable.setItem(s, 0, sched_name)
+                self.scheduleTable.setItem(s, 1, n_trials)
+
+    def add_schedule(self):
+        animal = self.current_animal()
+        if animal is not None:
+            fname, suff = QtWidgets.QFileDialog.getOpenFileName(self, "Load Schedule", '', '*.schedule')
+            with open(fname, 'rb') as fn:
+                schedule_data = pickle.load(fn)
+
+            animal.schedule_list.append(Experiment.Schedule(os.path.basename(fname), schedule_data['schedule'], schedule_data['headers']))
+
+            self.animal_selected()
