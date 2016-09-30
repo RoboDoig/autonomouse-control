@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(771, 600)
+        MainWindow.resize(829, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -48,9 +48,12 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.scheduleTable.setHorizontalHeaderItem(2, item)
         self.gridLayout.addWidget(self.scheduleTable, 0, 2, 3, 1)
+        self.trialView = QtWidgets.QTableView(self.centralwidget)
+        self.trialView.setObjectName("trialView")
+        self.gridLayout.addWidget(self.trialView, 0, 3, 4, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 771, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 829, 21))
         self.menubar.setObjectName("menubar")
         self.menuUpdate_List = QtWidgets.QMenu(self.menubar)
         self.menuUpdate_List.setObjectName("menuUpdate_List")

@@ -3,7 +3,7 @@ import os
 
 from PyQt5 import QtWidgets, QtGui
 from Designs import animalWindow
-from Models import Experiment
+from Models import Experiment, GuiModels
 
 
 class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
@@ -21,6 +21,7 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
         self.addScheduleButton.clicked.connect(self.add_schedule)
 
         self.animalTable.selectionModel().selectionChanged.connect(self.animal_selected)
+        self.scheduleTable.selectionModel().selectionChanged.connect(self.schedule_selected)
 
     def add_row(self):
         self.animalTable.insertRow(self.animalTable.rowCount())
@@ -49,6 +50,13 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
         except:
             return None
 
+    def current_sched_index(self):
+        try:
+            row = self.scheduleTable.selectedIndexes()[0].row()
+            return row
+        except:
+            return 0
+
     def update_animals(self):
         for row in range(self.animalTable.rowCount()):
             id = self.animalTable.item(row, 0).text()
@@ -68,6 +76,12 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
 
                 self.scheduleTable.setItem(s, 0, sched_name)
                 self.scheduleTable.setItem(s, 1, n_trials)
+
+    def schedule_selected(self):
+        animal = self.current_animal()
+        schedule = animal.schedule_list[self.current_sched_index()]
+
+        self.trialView.setModel(GuiModels.TableModel(schedule.schedule_headers, schedule.schedule_trials, parent=self))
 
     def add_schedule(self):
         animal = self.current_animal()
