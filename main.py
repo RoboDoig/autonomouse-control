@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets
 from Designs import mainWindow
 from Windows import AppWindows
 from Models import Experiment
+from Controllers import ExperimentControl
 
 
 class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
@@ -14,6 +15,8 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.setupUi(self)
 
         self.experiment = Experiment.Experiment()
+        self.experiment_control = ExperimentControl.ExperimentController(self)
+
         self.hardware_prefs = None
         if os.path.exists('hardware.config'):
             self.load_config_data()

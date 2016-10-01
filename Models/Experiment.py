@@ -24,6 +24,7 @@ class Schedule:
         self.schedule_trials = schedule_trials
         self.schedule_headers = schedule_headers
 
+
 class Trial:
     def __init__(self, parameters):
         self.parameters = parameters
