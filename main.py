@@ -1,4 +1,6 @@
 import sys
+import os
+import pickle
 
 from PyQt5 import QtWidgets
 from Designs import mainWindow
@@ -12,13 +14,25 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.setupUi(self)
 
         self.experiment = Experiment.Experiment()
+        self.hardware_prefs = None
+        if os.path.exists('hardware.config'):
+            self.load_config_data()
 
         # function bindings
         self.actionAnimal_List.triggered.connect(self.open_animal_window)
+        self.actionHardware_Preferences.triggered.connect(self.open_hardware_window)
+
+    def load_config_data(self):
+        with open('hardware.config', 'rb') as fn:
+            self.hardware_prefs = pickle.load(fn)
 
     def open_animal_window(self):
         animalWindow = AppWindows.AnimalWindow(self)
         animalWindow.show()
+
+    def open_hardware_window(self):
+        hardwareWindow = AppWindows.HardwareWindow(self)
+        hardwareWindow.show()
 
 
 # Back up the reference to the exceptionhook

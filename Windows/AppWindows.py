@@ -2,7 +2,7 @@ import pickle
 import os
 
 from PyQt5 import QtWidgets, QtGui
-from Designs import animalWindow
+from Designs import animalWindow, hardwareWindow
 from Models import Experiment, GuiModels
 
 
@@ -93,3 +93,34 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
             animal.schedule_list.append(Experiment.Schedule(os.path.basename(fname), schedule_data['schedule'], schedule_data['headers']))
 
             self.animal_selected()
+
+
+class HardwareWindow(QtWidgets.QMainWindow, hardwareWindow.Ui_MainWindow):
+    def __init__(self, parent = None):
+        QtWidgets.QMainWindow.__init__(self, parent)
+        self.setupUi(self)
+        self.parent = parent
+
+        if self.parent.hardware_prefs is not None:
+            self.set_preferences(self.parent.hardware_prefs)
+
+        self.actionSave_Preferences.triggered.connect(self.save_preferences)
+
+    def set_preferences(self, prefs):
+        self.analogInputEdit.setText(prefs['analog_input'])
+        self.analogChannelsSpin.setValue(prefs['analog_channels'])
+        self.digitalOutputEdit.setText(prefs['digital_output'])
+        self.syncClockEdit.setText(prefs['sync_clock'])
+        self.digitalChannelsSpin.setValue(prefs['digital_channels'])
+
+    def save_preferences(self):
+        prefs = {'analog_input': self.analogInputEdit.text(),
+                 'analog_channels': int(self.analogChannelsSpin.value()),
+                 'digital_output': self.digitalOutputEdit.text(),
+                 'digital_channels': int(self.digitalChannelsSpin.value()),
+                 'sync_clock': self.syncClockEdit.text()}
+
+        self.parent.hardware_prefs = prefs
+
+        with open('hardware.config', 'wb') as fn:
+            pickle.dump(prefs, fn)

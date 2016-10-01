@@ -37,6 +37,15 @@ class Ui_MainWindow(object):
         self.actionHardware_Preferences.setObjectName("actionHardware_Preferences")
         self.actionAnimal_List = QtWidgets.QAction(MainWindow)
         self.actionAnimal_List.setObjectName("actionAnimal_List")
+        self.actionSave_Experiment = QtWidgets.QAction(MainWindow)
+        self.actionSave_Experiment.setObjectName("actionSave_Experiment")
+        self.actionLoad_Experiment = QtWidgets.QAction(MainWindow)
+        self.actionLoad_Experiment.setObjectName("actionLoad_Experiment")
+        self.actionPreferences = QtWidgets.QAction(MainWindow)
+        self.actionPreferences.setObjectName("actionPreferences")
+        self.menuFile.addAction(self.actionSave_Experiment)
+        self.menuFile.addAction(self.actionLoad_Experiment)
+        self.menuFile.addAction(self.actionPreferences)
         self.menuHardware.addAction(self.actionHardware_Preferences)
         self.menuAnimals.addAction(self.actionAnimal_List)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -48,10 +57,13 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "AutonoMouse"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuHardware.setTitle(_translate("MainWindow", "Hardware"))
         self.menuAnimals.setTitle(_translate("MainWindow", "Animals"))
         self.actionHardware_Preferences.setText(_translate("MainWindow", "Hardware Preferences"))
         self.actionAnimal_List.setText(_translate("MainWindow", "Animal List"))
+        self.actionSave_Experiment.setText(_translate("MainWindow", "Save Experiment"))
+        self.actionLoad_Experiment.setText(_translate("MainWindow", "Load Experiment"))
+        self.actionPreferences.setText(_translate("MainWindow", "Preferences"))
 
