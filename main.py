@@ -17,17 +17,29 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.experiment = Experiment.Experiment()
         self.experiment_control = ExperimentControl.ExperimentController(self)
 
-        self.hardware_prefs = None
-        if os.path.exists('hardware.config'):
-            self.load_config_data()
+        self.hardware_prefs = self.load_config_data()
+        self.preferences = self.load_preferences_data()
 
         # function bindings
         self.actionAnimal_List.triggered.connect(self.open_animal_window)
         self.actionHardware_Preferences.triggered.connect(self.open_hardware_window)
+        self.actionPreferences.triggered.connect(self.open_preferences_window)
 
-    def load_config_data(self):
-        with open('hardware.config', 'rb') as fn:
-            self.hardware_prefs = pickle.load(fn)
+    @staticmethod
+    def load_config_data():
+        if os.path.exists('hardware.config'):
+            with open('hardware.config', 'rb') as fn:
+                return pickle.load(fn)
+        else:
+            return None
+
+    @staticmethod
+    def load_preferences_data():
+        if os.path.exists('preferences.config'):
+            with open('preferences.config', 'rb') as fn:
+                return pickle.load(fn)
+        else:
+            return None
 
     def open_animal_window(self):
         animalWindow = AppWindows.AnimalWindow(self)
@@ -36,6 +48,10 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
     def open_hardware_window(self):
         hardwareWindow = AppWindows.HardwareWindow(self)
         hardwareWindow.show()
+
+    def open_preferences_window(self):
+        preferencesWindow = AppWindows.PreferencesWindow(self)
+        preferencesWindow.show()
 
 
 # Back up the reference to the exceptionhook

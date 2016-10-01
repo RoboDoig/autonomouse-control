@@ -2,7 +2,7 @@ import pickle
 import os
 
 from PyQt5 import QtWidgets, QtGui
-from Designs import animalWindow, hardwareWindow
+from Designs import animalWindow, hardwareWindow, prefsWindow
 from Models import Experiment, GuiModels
 
 
@@ -124,3 +124,33 @@ class HardwareWindow(QtWidgets.QMainWindow, hardwareWindow.Ui_MainWindow):
 
         with open('hardware.config', 'wb') as fn:
             pickle.dump(prefs, fn)
+
+
+class PreferencesWindow(QtWidgets.QMainWindow, prefsWindow.Ui_MainWindow):
+    def __init__(self, parent = None):
+        QtWidgets.QMainWindow.__init__(self, parent)
+        self.setupUi(self)
+        self.parent = parent
+
+        if self.parent.preferences is not None:
+            self.set_preferences(self.parent.preferences)
+
+        self.actionSave_Preferences.triggered.connect(self.save_preferences)
+        self.savePathButton.clicked.connect(self.select_save_path)
+
+    def set_preferences(self, prefs):
+        self.savePathEdit.setText(prefs['save_path'])
+        self.experimentNameEdit.setText(prefs['experiment_name'])
+
+    def save_preferences(self):
+        prefs = {'save_path': self.savePathEdit.text(),
+                 'experiment_name': self.experimentNameEdit.text()}
+
+        self.parent.preferences = prefs
+
+        with open('preferences.config', 'wb') as fn:
+            pickle.dump(prefs, fn)
+
+    def select_save_path(self):
+        save_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Choose Save Folder')
+        self.savePathEdit.setText(save_path)

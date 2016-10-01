@@ -15,7 +15,7 @@ class ExperimentLoop(QtCore.QThread):
         print('not implemented')
 
 
-class ExperimentController(parent=None):
+class ExperimentController():
     def __init__(self, parent):
         self.thread = ExperimentLoop(self)
         self.thread.trigger.connect(self.finish_trial)
