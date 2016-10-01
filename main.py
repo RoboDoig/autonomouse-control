@@ -15,7 +15,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.setupUi(self)
 
         self.experiment = Experiment.Experiment()
-        self.experiment_control = ExperimentControl.ExperimentController(self)
+        self.experiment_control = ExperimentControl.ExperimentController()
 
         self.hardware_prefs = self.load_config_data()
         self.preferences = self.load_preferences_data()
@@ -24,6 +24,9 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.actionAnimal_List.triggered.connect(self.open_animal_window)
         self.actionHardware_Preferences.triggered.connect(self.open_hardware_window)
         self.actionPreferences.triggered.connect(self.open_preferences_window)
+
+        self.startButton.clicked.connect(self.experiment_control.start)
+        self.stopButton.clicked.connect(self.experiment_control.stop)
 
     @staticmethod
     def load_config_data():

@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="0" colspan="2">
-     <widget class="QTableView" name="tableView"/>
+     <widget class="QTableView" name="trialView"/>
     </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox">

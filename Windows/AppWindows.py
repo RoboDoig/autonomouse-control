@@ -112,13 +112,15 @@ class HardwareWindow(QtWidgets.QMainWindow, hardwareWindow.Ui_MainWindow):
         self.digitalOutputEdit.setText(prefs['digital_output'])
         self.syncClockEdit.setText(prefs['sync_clock'])
         self.digitalChannelsSpin.setValue(prefs['digital_channels'])
+        self.rfidPortEdit.setText(prefs['rfid_port'])
 
     def save_preferences(self):
         prefs = {'analog_input': self.analogInputEdit.text(),
                  'analog_channels': int(self.analogChannelsSpin.value()),
                  'digital_output': self.digitalOutputEdit.text(),
                  'digital_channels': int(self.digitalChannelsSpin.value()),
-                 'sync_clock': self.syncClockEdit.text()}
+                 'sync_clock': self.syncClockEdit.text(),
+                 'rfid_port': self.rfidPortEdit.text()}
 
         self.parent.hardware_prefs = prefs
 

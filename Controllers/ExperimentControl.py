@@ -1,31 +1,44 @@
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
+import numpy as np
+from time import sleep
+import sys
 
 
-class ExperimentLoop(QtCore.QThread):
+class ExperimentWorker(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+
     def __init__(self, parent=None):
-        """
-        @type parent: ExperimentController
-        """
-        QtCore.QThread.__init__(self)
+        super(self.__class__, self).__init__(None)
         self.parent = parent
 
-    trigger = QtCore.pyqtSignal()
+        self.counter = 0
 
-    def run(self):
-        print('not implemented')
+    def trial(self):
+        while self.parent.should_run:
+            print(self.counter)
+            self.counter += 1
+            sleep(0.1)
+        self.finished.emit()
 
 
 class ExperimentController():
-    def __init__(self, parent):
-        self.thread = ExperimentLoop(self)
-        self.thread.trigger.connect(self.finish_trial)
+    def __init__(self):
+        self.thread = QtCore.QThread()
+        self.trial_job = ExperimentWorker(self)
+        self.trial_job.moveToThread(self.thread)
+
+        self.thread.finished.connect(self.thread.quit)
+        self.thread.started.connect(self.trial_job.trial)
+
         self.should_run = False
 
-    def start_experiment(self):
-        print('not implemented')
+    def start(self):
+        if not self.should_run:
+            self.should_run = True
+            self.thread.start()
 
-    def stop_experiment(self):
-        print('not implemented')
-
-    def finish_trial(self):
-        print('not implemented')
+    def stop(self):
+        if self.should_run:
+            self.should_run = False
+            self.thread.terminate()
+            self.thread.wait()
