@@ -5,7 +5,7 @@ import pickle
 from PyQt5 import QtWidgets
 from Designs import mainWindow
 from Windows import AppWindows
-from Models import Experiment
+from Models import Experiment, GuiModels
 from Controllers import ExperimentControl
 
 
@@ -27,6 +27,15 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
         self.startButton.clicked.connect(self.experiment_control.start)
         self.stopButton.clicked.connect(self.experiment_control.stop)
+
+        self.experiment_control.trial_job.trial_end.connect(self.update_trial_view)
+
+        # trial view model
+        self.model = GuiModels.TableModel(['Animal ID', 'Time Stamp', 'Schedule Idx', 'Trial Idx', 'Rewarded',
+                                           'Response', 'Correct', 'Timeout'],
+                                          self.experiment.trials, parent=self)
+
+        self.trialView.setModel(self.model)
 
     @staticmethod
     def load_config_data():
@@ -55,6 +64,12 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
     def open_preferences_window(self):
         preferencesWindow = AppWindows.PreferencesWindow(self)
         preferencesWindow.show()
+
+    def update_trial_view(self):
+        self.model.layoutChanged.emit()
+
+    def save_experiment(self):
+        
 
 
 # Back up the reference to the exceptionhook

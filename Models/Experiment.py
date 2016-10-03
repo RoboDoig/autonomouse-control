@@ -1,12 +1,23 @@
 class Experiment:
     def __init__(self):
         self.animal_list = {'default': Mouse('default', 15.0)}
+        self.default_row = [['', '', '', '', '', '', '', '']]
+        self.trials = self.default_row.copy()
+
+        self.name = None
+        self.date = None
 
     def add_mouse(self, id, water):
         if id in self.animal_list.keys():
             self.animal_list[id].water = water
         else:
             self.animal_list[id] = Mouse(id, water)
+
+    def add_trial(self, animal_id, timestamp, schedule, trial, rewarded, response, correct, timeout):
+        if self.trials == self.default_row.copy():
+            self.trials[0] = [animal_id, timestamp, schedule, trial, rewarded, response, correct, timeout]
+        else:
+            self.trials.append([animal_id, timestamp, schedule, trial, rewarded, response, correct, timeout])
 
 
 class Mouse:
@@ -29,6 +40,29 @@ class Mouse:
         pulse_params = current_schedule.trial_params[current_schedule.current_trial]
         return pulse_params
 
+    @property
+    def current_trial_idx(self):
+        return self.schedule_list[self.current_schedule_idx].current_trial
+
+    def advance_trial(self):
+        # end of schedule? advance to the next
+        if self.schedule_list[self.current_schedule_idx].current_trial == \
+           self.schedule_list[self.current_schedule_idx].n_trials() - 1:
+            self.current_schedule_idx += 1
+
+        # still trials left? advance to the next?
+        elif self.schedule_list[self.current_schedule_idx].current_trial < \
+             self.schedule_list[self.current_schedule_idx].n_trials() - 1:
+            self.schedule_list[self.current_schedule_idx].current_trial += 1
+
+        # else we have reached the end of available trials - add a repeat of the current schedule
+        else:
+            current_schedule = self.schedule_list[self.current_schedule_idx]
+            fail_safe_schedule = Schedule(current_schedule.id, current_schedule.schedule_trials,
+                                          current_schedule.schedule_headers, current_schedule.trial_params)
+            self.schedule_list.append(fail_safe_schedule)
+            self.current_schedule_idx += 1
+
 
 class Schedule:
     def __init__(self, id, schedule_trials, schedule_headers, trial_params):
@@ -38,7 +72,18 @@ class Schedule:
         self.schedule_headers = schedule_headers
         self.trial_params = trial_params
 
+        self.trial_list = list()
+
+    def add_trial_data(self, timestamp, response, correct, timeout):
+        self.trial_list.append(Trial(timestamp, response, correct, timeout))
+
+    def n_trials(self):
+        return len(self.schedule_trials)
+
 
 class Trial:
-    def __init__(self, parameters):
-        self.parameters = parameters
+    def __init__(self, timestamp, response, correct, timeout):
+        self.timestamp = timestamp
+        self.response = response
+        self.correct = correct
+        self.timeout = timeout

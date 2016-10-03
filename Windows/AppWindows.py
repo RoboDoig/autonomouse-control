@@ -116,6 +116,7 @@ class HardwareWindow(QtWidgets.QMainWindow, hardwareWindow.Ui_MainWindow):
         self.rfidPortEdit.setText(prefs['rfid_port'])
         self.samplingRateEdit.setText(str(prefs['samp_rate']))
         self.lickChannelSpin.setValue(prefs['lick_channel'])
+        self.timeoutEdit.setText(str(prefs['timeout']))
 
     def save_preferences(self):
         prefs = {'analog_input': self.analogInputEdit.text(),
@@ -125,7 +126,8 @@ class HardwareWindow(QtWidgets.QMainWindow, hardwareWindow.Ui_MainWindow):
                  'sync_clock': self.syncClockEdit.text(),
                  'rfid_port': self.rfidPortEdit.text(),
                  'samp_rate': int(self.samplingRateEdit.text()),
-                 'lick_channel': int(self.lickChannelSpin.value())}
+                 'lick_channel': int(self.lickChannelSpin.value()),
+                 'timeout': int(self.timeoutEdit.text())}
 
         self.parent.hardware_prefs = prefs
 

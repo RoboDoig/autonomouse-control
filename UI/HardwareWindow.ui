@@ -49,6 +49,13 @@
       </property>
      </widget>
     </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Lick Channel</string>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
@@ -104,6 +111,16 @@
       </property>
      </widget>
     </item>
+    <item row="5" column="1">
+     <widget class="QSpinBox" name="lickChannelSpin">
+      <property name="maximum">
+       <number>31</number>
+      </property>
+      <property name="value">
+       <number>3</number>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="1">
      <widget class="QLineEdit" name="syncClockEdit">
       <property name="text">
@@ -138,20 +155,17 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_8">
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_9">
       <property name="text">
-       <string>Lick Channel</string>
+       <string>Timeout (s)</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QSpinBox" name="lickChannelSpin">
-      <property name="maximum">
-       <number>31</number>
-      </property>
-      <property name="value">
-       <number>3</number>
+    <item row="6" column="1">
+     <widget class="QLineEdit" name="timeoutEdit">
+      <property name="text">
+       <string>6</string>
       </property>
      </widget>
     </item>
