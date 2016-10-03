@@ -24,6 +24,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.actionAnimal_List.triggered.connect(self.open_animal_window)
         self.actionHardware_Preferences.triggered.connect(self.open_hardware_window)
         self.actionSave_Experiment.triggered.connect(self.save_experiment)
+        self.actionLoad_Experiment.triggered.connect(self.load_experiment)
 
         self.startButton.clicked.connect(self.experiment_control.start)
         self.stopButton.clicked.connect(self.experiment_control.stop)
@@ -90,11 +91,28 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.experiment_control = None
 
         with open(fname, 'rb') as fn:
-            self.experiment = pickle.load(fn)
+            experiment = pickle.load(fn)
 
+        self.experiment = experiment
+        print(self.experiment.trials)
         self.experiment_control = ExperimentControl.ExperimentController(self)
 
+        # trial view model
+        self.model = GuiModels.TableModel(['Animal ID', 'Time Stamp', 'Schedule Idx', 'Trial Idx', 'Rewarded',
+                                           'Response', 'Correct', 'Timeout'],
+                                          self.experiment.trials, parent=self)
+
+        self.trialView.setModel(self.model)
+
+        self.startButton.clicked.connect(self.experiment_control.start)
+        self.stopButton.clicked.connect(self.experiment_control.stop)
+
+        self.experiment_control.trial_job.trial_end.connect(self.update_trial_view)
+
         self.update_experiment_info()
+        self.update_trial_view()
+
+
 
 
 # Back up the reference to the exceptionhook
