@@ -1,6 +1,7 @@
 import sys
 import os
 import pickle
+import datetime
 
 from PyQt5 import QtWidgets
 from Designs import mainWindow
@@ -15,7 +16,6 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.setupUi(self)
 
         self.hardware_prefs = self.load_config_data()
-        self.preferences = self.load_preferences_data()
 
         self.experiment = Experiment.Experiment()
         self.experiment_control = ExperimentControl.ExperimentController(self)
@@ -23,7 +23,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         # function bindings
         self.actionAnimal_List.triggered.connect(self.open_animal_window)
         self.actionHardware_Preferences.triggered.connect(self.open_hardware_window)
-        self.actionPreferences.triggered.connect(self.open_preferences_window)
+        self.actionSave_Experiment.triggered.connect(self.save_experiment)
 
         self.startButton.clicked.connect(self.experiment_control.start)
         self.stopButton.clicked.connect(self.experiment_control.stop)
@@ -46,7 +46,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
             return None
 
     @staticmethod
-    def load_preferences_data():
+    def load_preference_data():
         if os.path.exists('preferences.config'):
             with open('preferences.config', 'rb') as fn:
                 return pickle.load(fn)
@@ -54,22 +54,47 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
             return None
 
     def open_animal_window(self):
-        animalWindow = AppWindows.AnimalWindow(self)
-        animalWindow.show()
+        animal_window = AppWindows.AnimalWindow(self)
+        animal_window.show()
 
     def open_hardware_window(self):
-        hardwareWindow = AppWindows.HardwareWindow(self)
-        hardwareWindow.show()
-
-    def open_preferences_window(self):
-        preferencesWindow = AppWindows.PreferencesWindow(self)
-        preferencesWindow.show()
+        hardware_window = AppWindows.HardwareWindow(self)
+        hardware_window.show()
 
     def update_trial_view(self):
         self.model.layoutChanged.emit()
 
+    def update_experiment_info(self):
+        self.experimentNameLabel.setText(self.experiment.name)
+        self.experimentDateLabel.setText(self.experiment.date)
+        self.savePathLabel.setText(self.experiment.save_path)
+
     def save_experiment(self):
-        
+        # TODO - bit messy, what if the experiment class changes, should rather be saving the data in the class
+        fname, suff = QtWidgets.QFileDialog.getSaveFileName(self, "Save Experiment", '', "AutonoMouse Experiment (*.autmaus)")
+        self.experiment.name = os.path.basename(fname)
+        self.experiment.save_path = os.path.dirname(fname)
+
+        # We don't change the original date of creation
+        if self.experiment.date is None:
+            self.experiment.date = str(datetime.datetime.now())
+
+        self.update_experiment_info()
+
+        with open(fname, 'wb') as fn:
+            pickle.dump(self.experiment, fn)
+
+    def load_experiment(self):
+        fname, suff = QtWidgets.QFileDialog.getOpenFileName(self, "Open Experiment", '', "AutonoMouse Experiment (*.autmaus)")
+        self.experiment = None
+        self.experiment_control = None
+
+        with open(fname, 'rb') as fn:
+            self.experiment = pickle.load(fn)
+
+        self.experiment_control = ExperimentControl.ExperimentController(self)
+
+        self.update_experiment_info()
 
 
 # Back up the reference to the exceptionhook

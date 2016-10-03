@@ -5,6 +5,7 @@ class Experiment:
         self.trials = self.default_row.copy()
 
         self.name = None
+        self.save_path = None
         self.date = None
 
     def add_mouse(self, id, water):
