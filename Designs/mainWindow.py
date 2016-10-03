@@ -17,6 +17,7 @@ class Ui_MainWindow(object):
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
         self.trialView = QtWidgets.QTableView(self.centralwidget)
+        self.trialView.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.trialView.setObjectName("trialView")
         self.gridLayout.addWidget(self.trialView, 1, 0, 1, 2)
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
@@ -53,6 +54,9 @@ class Ui_MainWindow(object):
         self.savePathLabel.setObjectName("savePathLabel")
         self.gridLayout_2.addWidget(self.savePathLabel, 1, 1, 1, 1)
         self.gridLayout.addWidget(self.groupBox_2, 0, 1, 1, 1)
+        self.graphicsView = PlotWidget(self.centralwidget)
+        self.graphicsView.setObjectName("graphicsView")
+        self.gridLayout.addWidget(self.graphicsView, 2, 0, 1, 2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1123, 21))
@@ -110,3 +114,4 @@ class Ui_MainWindow(object):
         self.actionLoad_Experiment.setText(_translate("MainWindow", "Load Experiment"))
         self.actionPreferences.setText(_translate("MainWindow", "Preferences"))
 
+from pyqtgraph import PlotWidget

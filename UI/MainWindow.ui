@@ -16,7 +16,11 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="0" colspan="2">
-     <widget class="QTableView" name="trialView"/>
+     <widget class="QTableView" name="trialView">
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+     </widget>
     </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox">
@@ -92,6 +96,9 @@
       </layout>
      </widget>
     </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="PlotWidget" name="graphicsView"/>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -153,6 +160,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

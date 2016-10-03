@@ -2,12 +2,14 @@ import sys
 import os
 import pickle
 import datetime
+import numpy as np
 
 from PyQt5 import QtWidgets
 from Designs import mainWindow
 from Windows import AppWindows
 from Models import Experiment, GuiModels
 from Controllers import ExperimentControl
+from PyPulse import PulseInterface
 
 
 class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
@@ -17,8 +19,8 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
         self.hardware_prefs = self.load_config_data()
 
-        self.experiment = Experiment.Experiment()
-        self.experiment_control = ExperimentControl.ExperimentController(self)
+        experiment = Experiment.Experiment()
+        self.setup_experiment_bindings(experiment)
 
         # function bindings
         self.actionAnimal_List.triggered.connect(self.open_animal_window)
@@ -26,30 +28,27 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.actionSave_Experiment.triggered.connect(self.save_experiment)
         self.actionLoad_Experiment.triggered.connect(self.load_experiment)
 
-        self.startButton.clicked.connect(self.experiment_control.start)
-        self.stopButton.clicked.connect(self.experiment_control.stop)
+    def setup_experiment_bindings(self, experiment):
+        self.experiment = experiment
+        self.experiment_control = ExperimentControl.ExperimentController(self)
 
-        self.experiment_control.trial_job.trial_end.connect(self.update_trial_view)
-
-        # trial view model
         self.model = GuiModels.TableModel(['Animal ID', 'Time Stamp', 'Schedule Idx', 'Trial Idx', 'Rewarded',
                                            'Response', 'Correct', 'Timeout'],
                                           self.experiment.trials, parent=self)
 
         self.trialView.setModel(self.model)
 
+        self.startButton.clicked.connect(self.experiment_control.start)
+        self.stopButton.clicked.connect(self.experiment_control.stop)
+
+        self.experiment_control.trial_job.trial_end.connect(self.update_trial_view)
+
+        self.trialView.selectionModel().selectionChanged.connect(self.on_trial_selected)
+
     @staticmethod
     def load_config_data():
         if os.path.exists('hardware.config'):
             with open('hardware.config', 'rb') as fn:
-                return pickle.load(fn)
-        else:
-            return None
-
-    @staticmethod
-    def load_preference_data():
-        if os.path.exists('preferences.config'):
-            with open('preferences.config', 'rb') as fn:
                 return pickle.load(fn)
         else:
             return None
@@ -64,6 +63,24 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
     def update_trial_view(self):
         self.model.layoutChanged.emit()
+
+    def update_graphics_view(self, trial):
+        animal = self.experiment.trials[trial][0]
+        sched_idx = self.experiment.trials[trial][2]
+        trial_idx = self.experiment.trials[trial][3]
+
+        trial_data = self.experiment.animal_list[animal].schedule_list[sched_idx].trial_params[trial_idx]
+
+        pulses, t = PulseInterface.make_pulse(self.hardware_prefs['samp_rate'], 0.0, 0.0, trial_data)
+
+        self.graphicsView.plotItem.clear()
+        for p, pulse in enumerate(pulses):
+            self.graphicsView.plotItem.plot(t, np.array(pulse) - (p * 1.1))
+
+    def on_trial_selected(self):
+        selected_trial = self.trialView.selectionModel().selectedRows()[0].row()
+        print(self.experiment.trials[selected_trial])
+        self.update_graphics_view(selected_trial)
 
     def update_experiment_info(self):
         self.experimentNameLabel.setText(self.experiment.name)
@@ -93,21 +110,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         with open(fname, 'rb') as fn:
             experiment = pickle.load(fn)
 
-        self.experiment = experiment
-        print(self.experiment.trials)
-        self.experiment_control = ExperimentControl.ExperimentController(self)
-
-        # trial view model
-        self.model = GuiModels.TableModel(['Animal ID', 'Time Stamp', 'Schedule Idx', 'Trial Idx', 'Rewarded',
-                                           'Response', 'Correct', 'Timeout'],
-                                          self.experiment.trials, parent=self)
-
-        self.trialView.setModel(self.model)
-
-        self.startButton.clicked.connect(self.experiment_control.start)
-        self.stopButton.clicked.connect(self.experiment_control.stop)
-
-        self.experiment_control.trial_job.trial_end.connect(self.update_trial_view)
+        self.setup_experiment_bindings(experiment)
 
         self.update_experiment_info()
         self.update_trial_view()
