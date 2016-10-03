@@ -90,7 +90,8 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
             with open(fname, 'rb') as fn:
                 schedule_data = pickle.load(fn)
 
-            animal.schedule_list.append(Experiment.Schedule(os.path.basename(fname), schedule_data['schedule'], schedule_data['headers']))
+            animal.add_schedule(os.path.basename(fname), schedule_data['schedule'], schedule_data['headers'],
+                                schedule_data['params'])
 
             self.animal_selected()
 
@@ -113,6 +114,8 @@ class HardwareWindow(QtWidgets.QMainWindow, hardwareWindow.Ui_MainWindow):
         self.syncClockEdit.setText(prefs['sync_clock'])
         self.digitalChannelsSpin.setValue(prefs['digital_channels'])
         self.rfidPortEdit.setText(prefs['rfid_port'])
+        self.samplingRateEdit.setText(str(prefs['samp_rate']))
+        self.lickChannelSpin.setValue(prefs['lick_channel'])
 
     def save_preferences(self):
         prefs = {'analog_input': self.analogInputEdit.text(),
@@ -120,7 +123,9 @@ class HardwareWindow(QtWidgets.QMainWindow, hardwareWindow.Ui_MainWindow):
                  'digital_output': self.digitalOutputEdit.text(),
                  'digital_channels': int(self.digitalChannelsSpin.value()),
                  'sync_clock': self.syncClockEdit.text(),
-                 'rfid_port': self.rfidPortEdit.text()}
+                 'rfid_port': self.rfidPortEdit.text(),
+                 'samp_rate': int(self.samplingRateEdit.text()),
+                 'lick_channel': int(self.lickChannelSpin.value())}
 
         self.parent.hardware_prefs = prefs
 

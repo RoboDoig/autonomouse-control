@@ -14,11 +14,11 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         super(self.__class__, self).__init__()
         self.setupUi(self)
 
-        self.experiment = Experiment.Experiment()
-        self.experiment_control = ExperimentControl.ExperimentController()
-
         self.hardware_prefs = self.load_config_data()
         self.preferences = self.load_preferences_data()
+
+        self.experiment = Experiment.Experiment()
+        self.experiment_control = ExperimentControl.ExperimentController(self)
 
         # function bindings
         self.actionAnimal_List.triggered.connect(self.open_animal_window)
