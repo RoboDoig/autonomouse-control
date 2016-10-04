@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 import numpy as np
 from time import sleep, time
 import sys
@@ -19,6 +19,10 @@ class ExperimentWorker(QtCore.QObject):
         self.parent = parent
         self.hardware_prefs = self.parent.parent.hardware_prefs
         self.experiment = self.parent.parent.experiment
+
+        print(self.experiment)
+        print(self.experiment.animal_list['default'].schedule_list)
+        print(self.experiment.animal_list['default'].current_schedule_idx)
 
     def trial(self):
         while self.parent.should_run:
@@ -125,9 +129,12 @@ class ExperimentController():
         self.should_run = False
 
     def start(self):
-        if not self.should_run:
-            self.should_run = True
-            self.thread.start()
+        if self.parent.experiment.save_path is not None:
+            if not self.should_run:
+                self.should_run = True
+                self.thread.start()
+        else:
+            QtWidgets.QMessageBox.about(self.parent, "Error", "Experiment not saved! Please save before starting.")
 
     def stop(self):
         if self.should_run:

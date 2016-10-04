@@ -19,8 +19,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
         self.hardware_prefs = self.load_config_data()
 
-        experiment = Experiment.Experiment()
-        self.setup_experiment_bindings(experiment)
+        self.setup_experiment_bindings(Experiment.Experiment())
 
         # function bindings
         self.actionAnimal_List.triggered.connect(self.open_animal_window)
@@ -34,10 +33,15 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
         self.model = GuiModels.TableModel(['Animal ID', 'Time Stamp', 'Schedule Idx', 'Trial Idx', 'Rewarded',
                                            'Response', 'Correct', 'Timeout'],
-                                          self.experiment.trials, parent=self)
+                                            self.experiment.trials, parent=self)
 
         self.trialView.setModel(self.model)
 
+        try:
+            self.startButton.disconnect()
+            self.stopButton.disconnect()
+        except:
+            pass
         self.startButton.clicked.connect(self.experiment_control.start)
         self.stopButton.clicked.connect(self.experiment_control.stop)
 
@@ -103,8 +107,6 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
     def load_experiment(self):
         fname, suff = QtWidgets.QFileDialog.getOpenFileName(self, "Open Experiment", '', "AutonoMouse Experiment (*.autmaus)")
-        self.experiment = None
-        self.experiment_control = None
 
         with open(fname, 'rb') as fn:
             experiment = pickle.load(fn)
@@ -113,8 +115,6 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
         self.update_experiment_info()
         self.update_trial_view()
-
-
 
 
 # Back up the reference to the exceptionhook
