@@ -79,7 +79,6 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
     def on_trial_selected(self):
         selected_trial = self.trialView.selectionModel().selectedRows()[0].row()
-        print(self.experiment.trials[selected_trial])
         self.update_graphics_view(selected_trial)
 
     def update_experiment_info(self):

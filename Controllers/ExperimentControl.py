@@ -7,6 +7,7 @@ from PyPulse import PulseInterface
 import daqface.DAQ as daq
 from TrialLogic import TrialConditions
 import datetime
+import scipy.io as sio
 
 
 class ExperimentWorker(QtCore.QObject):
@@ -62,13 +63,13 @@ class ExperimentWorker(QtCore.QObject):
                 if result == TrialConditions.TrialResult.correct_response:
                     self.reward()
                 elif result == TrialConditions.TrialResult.false_alarm:
-                    sleep(self.hardware_prefs['timeout'])
+                    self.timeout()
 
                 """ Advance animal to next trial """
                 animal.advance_trial()
 
                 """ Save bulkiest part of data to disk and save experiment if necessary """
-                # TODO
+                self.save_data(animal.id, timestamp, analog_data, rewarded, response, correct, timeout, pulses, t)
 
                 """ Signal that trial has finished """
                 print(time() - start)
@@ -90,7 +91,26 @@ class ExperimentWorker(QtCore.QObject):
         print('not implemented')
 
     def timeout(self):
-        print('not implemented')
+        sleep(self.hardware_prefs['timeout'])
+
+    def save_data(self, animal_id, timestamp, analog_data, rewarded, response, correct, timeout, pulses, time_axis):
+
+        timestamp = str(timestamp)
+        timestamp = timestamp.replace(' ', '_')
+        timestamp = timestamp.replace(':', '_')
+
+        file_name = self.experiment.save_path + '/' + str(len(self.experiment.trials)) + '_' + timestamp + '_' + animal_id
+
+        sio.savemat(file_name + '.mat', {'animal_id': animal_id,
+                                         'timestamp': timestamp,
+                                         'analog_data': analog_data,
+                                         'rewarded': rewarded,
+                                         'response': response,
+                                         'correct': correct,
+                                         'timeout': timeout,
+                                         'pulses': pulses,
+                                         'time_axis': time_axis})
+
 
 class ExperimentController():
     def __init__(self, parent):
