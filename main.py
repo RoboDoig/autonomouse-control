@@ -106,7 +106,8 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
             pickle.dump(self.experiment, fn)
 
     def load_experiment(self):
-        fname, suff = QtWidgets.QFileDialog.getOpenFileName(self, "Open Experiment", '', "AutonoMouse Experiment (*.autmaus)")
+        fname, suff = QtWidgets.QFileDialog.getOpenFileName(self, "Open Experiment", '',
+                                                            "AutonoMouse Experiment (*.autmaus)")
 
         with open(fname, 'rb') as fn:
             experiment = pickle.load(fn)
