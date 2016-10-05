@@ -46,6 +46,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         self.stopButton.clicked.connect(self.experiment_control.stop)
 
         self.experiment_control.trial_job.trial_end.connect(self.update_trial_view)
+        self.experiment_control.trial_job.trial_end.connect(self.update_data_view)
 
         self.trialView.selectionModel().selectionChanged.connect(self.on_trial_selected)
 
@@ -68,6 +69,10 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
     def update_trial_view(self):
         self.model.layoutChanged.emit()
 
+    def update_data_view(self):
+        self.dataView.plotItem.clear()
+        self.dataView.plotItem.plot(np.array(self.experiment.last_data))
+
     def update_graphics_view(self, trial):
         animal = self.experiment.trials[trial][0]
         sched_idx = self.experiment.trials[trial][2]
@@ -82,7 +87,10 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
             self.graphicsView.plotItem.plot(t, np.array(pulse) - (p * 1.1))
 
     def on_trial_selected(self):
-        selected_trial = self.trialView.selectionModel().selectedRows()[0].row()
+        try:
+            selected_trial = self.trialView.selectionModel().selectedRows()[0].row()
+        except:
+            selected_trial = 0
         self.update_graphics_view(selected_trial)
 
     def update_experiment_info(self):

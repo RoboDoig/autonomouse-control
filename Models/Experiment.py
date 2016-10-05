@@ -8,6 +8,8 @@ class Experiment:
         self.save_path = None
         self.date = None
 
+        self.last_data = None
+
     def add_mouse(self, id, water):
         if id in self.animal_list.keys():
             self.animal_list[id].water = water

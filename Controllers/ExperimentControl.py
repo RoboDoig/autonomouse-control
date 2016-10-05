@@ -46,6 +46,7 @@ class ExperimentWorker(QtCore.QObject):
 
                 analog_data = trial_daq.DoTask()
                 lick_data = analog_data[self.hardware_prefs['lick_channel']]
+                self.experiment.last_data = lick_data
 
                 """ Analyse the lick response """
                 rewarded = current_trial[0]
@@ -88,7 +89,6 @@ class ExperimentWorker(QtCore.QObject):
         # animal = random.choice(animals)
 
         animal = rfid.check_rfid(self.hardware_prefs['rfid_port'], 10)
-        print(animal)
         return self.experiment.animal_list[animal]
 
     def reward(self):
