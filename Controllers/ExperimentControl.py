@@ -8,6 +8,7 @@ import daqface.DAQ as daq
 from TrialLogic import TrialConditions
 import datetime
 import scipy.io as sio
+import HelperFunctions.RFID as rfid
 
 
 class ExperimentWorker(QtCore.QObject):
@@ -19,10 +20,6 @@ class ExperimentWorker(QtCore.QObject):
         self.parent = parent
         self.hardware_prefs = self.parent.parent.hardware_prefs
         self.experiment = self.parent.parent.experiment
-
-        print(self.experiment)
-        print(self.experiment.animal_list['default'].schedule_list)
-        print(self.experiment.animal_list['default'].current_schedule_idx)
 
     def trial(self):
         while self.parent.should_run:
@@ -87,9 +84,12 @@ class ExperimentWorker(QtCore.QObject):
 
     def get_present_animal(self):
         # returns the animal in the port - DEBUG just chooses a random animal
-        animals = list(self.experiment.animal_list.keys())
-        random_animal = random.choice(animals)
-        return self.experiment.animal_list[random_animal]
+        # animals = list(self.experiment.animal_list.keys())
+        # animal = random.choice(animals)
+
+        animal = rfid.check_rfid(self.hardware_prefs['rfid_port'], 10)
+        print(animal)
+        return self.experiment.animal_list[animal]
 
     def reward(self):
         print('not implemented')
