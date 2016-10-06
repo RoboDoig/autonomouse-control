@@ -72,6 +72,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
     def update_data_view(self):
         self.dataView.plotItem.clear()
         self.dataView.plotItem.plot(np.array(self.experiment.last_data))
+        self.dataView.setYRange(0, 6)
 
     def update_graphics_view(self, trial):
         animal = self.experiment.trials[trial][0]

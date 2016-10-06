@@ -1,6 +1,6 @@
 class Experiment:
     def __init__(self):
-        self.animal_list = {'default': Mouse('default', 15.0)}
+        self.animal_list = {'default': Mouse('default', 0.15)}
         self.default_row = [['', '', '', '', '', '', '', '']]
         self.trials = self.default_row.copy()
 

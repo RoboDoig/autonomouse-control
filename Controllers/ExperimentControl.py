@@ -9,6 +9,7 @@ from TrialLogic import TrialConditions
 import datetime
 import scipy.io as sio
 import HelperFunctions.RFID as rfid
+import HelperFunctions.Reward as reward
 
 
 class ExperimentWorker(QtCore.QObject):
@@ -63,7 +64,7 @@ class ExperimentWorker(QtCore.QObject):
 
                 """ Determine reward conditions and enact """
                 if result == TrialConditions.TrialResult.correct_response:
-                    self.reward()
+                    self.reward(animal)
                 elif result == TrialConditions.TrialResult.false_alarm:
                     self.timeout()
 
@@ -91,8 +92,9 @@ class ExperimentWorker(QtCore.QObject):
         animal = rfid.check_rfid(self.hardware_prefs['rfid_port'], 10)
         return self.experiment.animal_list[animal]
 
-    def reward(self):
-        print('not implemented')
+    def reward(self, animal):
+        reward.deliver_reward("dev2/ai0", self.hardware_prefs['analog_output'], self.hardware_prefs['sync_clock'],
+                              self.hardware_prefs['samp_rate'], animal.water)
 
     def timeout(self):
         sleep(self.hardware_prefs['timeout'])
