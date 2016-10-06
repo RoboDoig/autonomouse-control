@@ -71,7 +71,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
     def update_data_view(self):
         self.dataView.plotItem.clear()
-        self.dataView.plotItem.plot(np.range(len(self.experiment.last_data)) / self.hardware_prefs['samp_rate'],
+        self.dataView.plotItem.plot(np.arange(len(self.experiment.last_data)) / self.hardware_prefs['samp_rate'],
                                     np.array(self.experiment.last_data))
         self.dataView.setYRange(0, 6)
 
