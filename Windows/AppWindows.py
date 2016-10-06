@@ -113,23 +113,29 @@ class HardwareWindow(QtWidgets.QMainWindow, hardwareWindow.Ui_MainWindow):
         self.digitalOutputEdit.setText(prefs['digital_output'])
         self.syncClockEdit.setText(prefs['sync_clock'])
         self.digitalChannelsSpin.setValue(prefs['digital_channels'])
+        self.analogOutputEdit.setText(prefs['analog_output'])
+        self.analogOutChannelsSpin.setValue(prefs['analog_out_channels'])
         self.rfidPortEdit.setText(prefs['rfid_port'])
         self.samplingRateEdit.setText(str(prefs['samp_rate']))
         self.lickChannelSpin.setValue(prefs['lick_channel'])
         self.timeoutEdit.setText(str(prefs['timeout']))
         self.beamChannelSpin.setValue(prefs['beam_channel'])
+        self.rewardChannelSpin.setValue(prefs['reward_channel'])
 
     def save_preferences(self):
         prefs = {'analog_input': self.analogInputEdit.text(),
                  'analog_channels': int(self.analogChannelsSpin.value()),
                  'digital_output': self.digitalOutputEdit.text(),
                  'digital_channels': int(self.digitalChannelsSpin.value()),
+                 'analog_output': self.analogOutputEdit.text(),
+                 'analog_out_channels': int(self.analogOutChannelsSpin.text()),
                  'sync_clock': self.syncClockEdit.text(),
                  'rfid_port': self.rfidPortEdit.text(),
                  'samp_rate': int(self.samplingRateEdit.text()),
                  'lick_channel': int(self.lickChannelSpin.value()),
                  'timeout': int(self.timeoutEdit.text()),
-                 'beam_channel': int(self.beamChannelSpin.value())}
+                 'beam_channel': int(self.beamChannelSpin.value()),
+                 'reward_channel': int(self.rewardChannelSpin.value())}
 
         self.parent.hardware_prefs = prefs
 
