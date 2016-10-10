@@ -83,10 +83,10 @@ class ExperimentWorker(QtCore.QObject):
 
     def animal_present(self):
         # checks whether animal is present in the port - DEBUG
-        return np.random.rand() > 0.999999
+        # return np.random.rand() > 0.999999
 
-        # return beam.check_beam(self.hardware_prefs['analog_input'], self.hardware_prefs['analog_channels'],
-        #                        self.hardware_prefs['beam_channel'])
+        return beam.check_beam(self.hardware_prefs['analog_input'], self.hardware_prefs['analog_channels'],
+                               self.hardware_prefs['beam_channel'])
 
     def get_present_animal(self):
         # returns the animal in the port - DEBUG just chooses a random animal
