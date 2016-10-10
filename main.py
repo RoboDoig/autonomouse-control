@@ -80,13 +80,16 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         sched_idx = self.experiment.trials[trial][2]
         trial_idx = self.experiment.trials[trial][3]
 
-        trial_data = self.experiment.animal_list[animal].schedule_list[sched_idx].trial_params[trial_idx]
+        try:
+            trial_data = self.experiment.animal_list[animal].schedule_list[sched_idx].trial_params[trial_idx]
 
-        pulses, t = PulseInterface.make_pulse(self.hardware_prefs['samp_rate'], 0.0, 0.0, trial_data)
+            pulses, t = PulseInterface.make_pulse(self.hardware_prefs['samp_rate'], 0.0, 0.0, trial_data)
 
-        self.graphicsView.plotItem.clear()
-        for p, pulse in enumerate(pulses):
-            self.graphicsView.plotItem.plot(t, np.array(pulse) - (p * 1.1))
+            self.graphicsView.plotItem.clear()
+            for p, pulse in enumerate(pulses):
+                self.graphicsView.plotItem.plot(t, np.array(pulse) - (p * 1.1))
+        except:
+            pass
 
     def on_trial_selected(self):
         try:

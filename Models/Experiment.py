@@ -48,18 +48,14 @@ class Mouse:
         return self.schedule_list[self.current_schedule_idx].current_trial
 
     def advance_trial(self):
-        print(self.current_schedule_idx)
-        print(self.schedule_list[self.current_schedule_idx].current_trial)
         # end of schedule and schedules available to move to? advance to the next
         if not self.schedule_list[self.current_schedule_idx].trials_left() and \
                 (self.current_schedule_idx + 1) < len(self.schedule_list):
             self.current_schedule_idx += 1
-            print("end of schedule")
 
         # still trials left? advance to the next?
         elif self.schedule_list[self.current_schedule_idx].trials_left():
             self.schedule_list[self.current_schedule_idx].current_trial += 1
-            print("move to next trial")
 
         # else we have reached the end of available trials - add a repeat of the current schedule
         else:
@@ -68,7 +64,6 @@ class Mouse:
                                           current_schedule.schedule_headers, current_schedule.trial_params)
             self.schedule_list.append(fail_safe_schedule)
             self.current_schedule_idx += 1
-            print("failsafe schedule")
 
 
 class Schedule:

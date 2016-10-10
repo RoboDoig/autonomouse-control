@@ -19,7 +19,7 @@ def lick_detect(lick_data, threshold, percent_accepted):
 
     # return whether this is accepted as a response or not
     # return whether this is accepted as a response or not
-    return percent_responded > percent_accepted
+    return percent_responded >= percent_accepted
 
 
 def trial_result(_rewarded, _response):

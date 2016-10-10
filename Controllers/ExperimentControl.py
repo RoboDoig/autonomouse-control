@@ -79,6 +79,8 @@ class ExperimentWorker(QtCore.QObject):
                 print(time() - start)
                 self.trial_end.emit()
 
+            sleep(0.1)
+
         self.finished.emit()
 
     def animal_present(self):
