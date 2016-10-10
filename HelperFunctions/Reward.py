@@ -4,7 +4,7 @@ import time
 
 
 def deliver_reward(ai_device, ao_device, sync_clock, samp_rate, secs):
-    on = np.ones((1, int(samp_rate*secs))) * 5.0
+    on = np.ones((1, int(samp_rate*secs))) * 6.0
     off = np.zeros((1, int(samp_rate/100)))
 
     vec = np.hstack((on, off))
