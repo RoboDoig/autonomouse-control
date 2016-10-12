@@ -2,8 +2,9 @@ import pickle
 import os
 
 from PyQt5 import QtWidgets, QtGui
-from Designs import animalWindow, hardwareWindow, prefsWindow
+from Designs import animalWindow, hardwareWindow, prefsWindow, analysisWindow
 from Models import Experiment, GuiModels
+from Analysis import Analysis
 
 
 class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
@@ -73,9 +74,12 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
             for s, schedule in enumerate(animal.schedule_list):
                 sched_name = QtWidgets.QTableWidgetItem(schedule.id)
                 n_trials = QtWidgets.QTableWidgetItem(str(len(schedule.schedule_trials)))
+                perc_complete = round(((schedule.current_trial) / (len(schedule.schedule_trials) - 1)) * 100, 2)
+                progress = QtWidgets.QTableWidgetItem(str(perc_complete))
 
                 self.scheduleTable.setItem(s, 0, sched_name)
                 self.scheduleTable.setItem(s, 1, n_trials)
+                self.scheduleTable.setItem(s, 2, progress)
 
     def schedule_selected(self):
         animal = self.current_animal()
@@ -171,3 +175,22 @@ class PreferencesWindow(QtWidgets.QMainWindow, prefsWindow.Ui_MainWindow):
     def select_save_path(self):
         save_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Choose Save Folder')
         self.savePathEdit.setText(save_path)
+
+
+class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
+    def __init__(self, experiment, parent=None):
+        QtWidgets.QMainWindow.__init__(self, parent)
+        self.setupUi(self)
+        self.parent = parent
+        self.experiment = experiment
+
+        self.populate_stats_table()
+
+    def populate_stats_table(self):
+        self.experimentStatsTable.setRowCount(len(self.experiment.animal_list.keys()))
+
+        for m, mouse in enumerate(self.experiment.animal_list.keys()):
+            id = QtWidgets.QTableWidgetItem(self.experiment.animal_list[mouse].id)
+            total_trials = QtWidgets.QTableWidgetItem(str(Analysis.n_trials_performed(self.experiment.animal_list[mouse])))
+            self.experimentStatsTable.setItem(m, 0, id)
+            self.experimentStatsTable.setItem(m, 1, total_trials)

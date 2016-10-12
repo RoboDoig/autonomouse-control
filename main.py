@@ -24,6 +24,7 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         # function bindings
         self.actionAnimal_List.triggered.connect(self.open_animal_window)
         self.actionHardware_Preferences.triggered.connect(self.open_hardware_window)
+        self.actionAnalyse_Experiment.triggered.connect(self.open_analysis_window)
         self.actionSave_Experiment.triggered.connect(self.save_experiment)
         self.actionLoad_Experiment.triggered.connect(self.load_experiment)
 
@@ -65,6 +66,10 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
     def open_hardware_window(self):
         hardware_window = AppWindows.HardwareWindow(self)
         hardware_window.show()
+
+    def open_analysis_window(self):
+        analysis_window = AppWindows.AnalysisWindow(self.experiment, parent=self)
+        analysis_window.show()
 
     def update_trial_view(self):
         self.model.layoutChanged.emit()

@@ -141,9 +141,16 @@
     </property>
     <addaction name="actionAnimal_List"/>
    </widget>
+   <widget class="QMenu" name="menuAnalysis">
+    <property name="title">
+     <string>Analysis</string>
+    </property>
+    <addaction name="actionAnalyse_Experiment"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHardware"/>
    <addaction name="menuAnimals"/>
+   <addaction name="menuAnalysis"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionHardware_Preferences">
@@ -169,6 +176,11 @@
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionAnalyse_Experiment">
+   <property name="text">
+    <string>Analyse Experiment</string>
    </property>
   </action>
  </widget>
