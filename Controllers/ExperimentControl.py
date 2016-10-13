@@ -74,6 +74,8 @@ class ExperimentWorker(QtCore.QObject):
 
                 """ Save bulkiest part of data to disk and save experiment if necessary """
                 self.save_data(animal.id, timestamp, analog_data, rewarded, response, correct, timeout, pulses, t)
+                if len(self.experiment.trials) % 20 == 0:
+                    self.experiment.save()
 
                 """ Signal that trial has finished """
                 print(time() - start)

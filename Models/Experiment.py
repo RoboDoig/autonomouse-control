@@ -1,3 +1,6 @@
+import pickle
+
+
 class Experiment:
     def __init__(self):
         self.animal_list = {'default': Mouse('default', 0.15)}
@@ -21,6 +24,12 @@ class Experiment:
             self.trials[0] = [animal_id, timestamp, schedule, trial, rewarded, response, correct, timeout]
         else:
             self.trials.append([animal_id, timestamp, schedule, trial, rewarded, response, correct, timeout])
+
+    def save(self):
+        fname = self.save_path + self.name
+
+        with open(fname, 'wb') as fn:
+            pickle.dump(self, fn)
 
 
 class Mouse:
