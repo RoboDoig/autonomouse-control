@@ -26,7 +26,7 @@ class Experiment:
             self.trials.append([animal_id, timestamp, schedule, trial, rewarded, response, correct, timeout])
 
     def save(self):
-        fname = self.save_path + self.name
+        fname = self.save_path + '/' + self.name
 
         with open(fname, 'wb') as fn:
             pickle.dump(self, fn)
