@@ -17,6 +17,8 @@ class Ui_MainWindow(object):
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
         self.experimentStatsTable = QtWidgets.QTableWidget(self.centralwidget)
+        self.experimentStatsTable.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.experimentStatsTable.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.experimentStatsTable.setObjectName("experimentStatsTable")
         self.experimentStatsTable.setColumnCount(2)
         self.experimentStatsTable.setRowCount(0)
