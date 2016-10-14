@@ -37,7 +37,7 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
         self.animalTable.setRowCount(len(animal_list.keys()))
         self.animalTable.setColumnCount(2)
 
-        for a, animal in enumerate(animal_list.keys()):
+        for a, animal in enumerate(sorted(list(animal_list.keys()))):
             id = QtWidgets.QTableWidgetItem(animal_list[animal].id)
             water = QtWidgets.QTableWidgetItem(str(animal_list[animal].water))
             self.animalTable.setItem(a, 0, id)
@@ -189,7 +189,7 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
     def populate_stats_table(self):
         self.experimentStatsTable.setRowCount(len(self.experiment.animal_list.keys()))
 
-        for m, mouse in enumerate(self.experiment.animal_list.keys()):
+        for m, mouse in enumerate(sorted(list(self.experiment.animal_list.keys()))):
             id = QtWidgets.QTableWidgetItem(self.experiment.animal_list[mouse].id)
             total_trials = QtWidgets.QTableWidgetItem(str(Analysis.n_trials_performed(self.experiment.animal_list[mouse])))
             self.experimentStatsTable.setItem(m, 0, id)
