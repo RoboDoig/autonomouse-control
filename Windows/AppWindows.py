@@ -186,6 +186,8 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
 
         self.populate_stats_table()
 
+        self.experimentStatsTable.selectionModel().selectionChanged.connect(self.on_animal_selected)
+
     def populate_stats_table(self):
         self.experimentStatsTable.setRowCount(len(self.experiment.animal_list.keys()))
 
@@ -194,3 +196,20 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
             total_trials = QtWidgets.QTableWidgetItem(str(Analysis.n_trials_performed(self.experiment.animal_list[mouse])))
             self.experimentStatsTable.setItem(m, 0, id)
             self.experimentStatsTable.setItem(m, 1, total_trials)
+
+    def on_animal_selected(self):
+        animal = self.current_animal()
+        binned_correct = Analysis.binned_performance(animal, int(self.binSizeSpin.value()))
+
+        self.animalPerformanceView.plotItem.clear()
+        self.animalPerformanceView.plotItem.plot(binned_correct)
+        self.animalPerformanceView.setYRange(-0.1, 1.1)
+
+    def current_animal(self):
+        try:
+            row = self.experimentStatsTable.selectedIndexes()[0].row()
+            animal = self.parent.experiment.animal_list[self.experimentStatsTable.item(row, 0).text()]
+            return animal
+        except:
+            return None
+
