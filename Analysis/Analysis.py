@@ -1,5 +1,6 @@
 import Models.Experiment
 import numpy as np
+import datetime
 
 
 def n_trials_performed(mouse):
@@ -76,3 +77,23 @@ def weighted_binned_performance(mouse, bin_size):
         binned_perf.append((sp_fraction + sm_fraction) / 2)
 
     return binned_perf
+
+
+def n_trials_since(mouse, since):
+    """
+    @type mouse: Experiment.Mouse
+    @type since: datetime.datetime
+    :return: int
+    """
+    n_trials = 0
+
+    for schedule in mouse.schedule_list:
+        for trial in schedule.trial_list:
+            if trial.timestamp > since:
+                n_trials += 1
+
+    return n_trials
+
+
+def n_trials_last_24(mouse):
+    return n_trials_since(mouse, datetime.datetime.now() - datetime.timedelta(days=1))

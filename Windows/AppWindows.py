@@ -1,6 +1,7 @@
 import pickle
 import os
 import numpy as np
+import datetime
 
 from PyQt5 import QtWidgets, QtGui
 from Designs import animalWindow, hardwareWindow, prefsWindow, analysisWindow
@@ -193,10 +194,15 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
         self.experimentStatsTable.setRowCount(len(self.experiment.animal_list.keys()))
 
         for m, mouse in enumerate(sorted(list(self.experiment.animal_list.keys()))):
-            id = QtWidgets.QTableWidgetItem(self.experiment.animal_list[mouse].id)
-            total_trials = QtWidgets.QTableWidgetItem(str(Analysis.n_trials_performed(self.experiment.animal_list[mouse])))
+            this_mouse = self.experiment.animal_list[mouse]
+
+            id = QtWidgets.QTableWidgetItem(this_mouse.id)
+            total_trials = QtWidgets.QTableWidgetItem(str(Analysis.n_trials_performed(this_mouse)))
+            trials_last24h = QtWidgets.QTableWidgetItem(str(Analysis.n_trials_last_24(this_mouse)))
+
             self.experimentStatsTable.setItem(m, 0, id)
             self.experimentStatsTable.setItem(m, 1, total_trials)
+            self.experimentStatsTable.setItem(m, 2, trials_last24h)
 
     def on_animal_selected(self):
         animal = self.current_animal()

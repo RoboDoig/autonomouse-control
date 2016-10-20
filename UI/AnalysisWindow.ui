@@ -36,6 +36,11 @@
         <string>Total Trials</string>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string>Trials in Last 24hrs</string>
+       </property>
+      </column>
      </widget>
     </item>
     <item row="1" column="0">
