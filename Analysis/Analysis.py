@@ -65,12 +65,23 @@ def weighted_binned_performance(mouse, bin_size):
 
         rewarded_count = np.sum(this_bin_rewarded)
         unrewarded_count = len(this_bin_rewarded) - rewarded_count
-        sp_fraction = len([t for t, trial in enumerate(this_bin_correct) if this_bin_rewarded[t] == this_bin_correct[t]]) / rewarded_count
+
+        sp_fraction = len([t for t, trial in enumerate(this_bin_correct) if this_bin_rewarded[t] + this_bin_correct[t] > 1]) / rewarded_count
 
         if unrewarded_count > 0:
+            print(len([t for t, trial in enumerate(this_bin_correct) if this_bin_rewarded[t] - this_bin_correct[t] < 0]))
+            print(unrewarded_count)
+
             sm_fraction = len([t for t, trial in enumerate(this_bin_correct) if this_bin_rewarded[t] - this_bin_correct[t] < 0]) / unrewarded_count
+
+            print(sm_fraction)
+            print('---')
         else:
             sm_fraction = 1
+
+        print(sp_fraction)
+        print(sm_fraction)
+        print('---')
 
         binned_perf.append((sp_fraction + sm_fraction) / 2)
 
