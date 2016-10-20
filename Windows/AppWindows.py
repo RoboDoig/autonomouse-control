@@ -199,11 +199,12 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
 
     def on_animal_selected(self):
         animal = self.current_animal()
-        binned_correct = Analysis.binned_performance(animal, int(self.binSizeSpin.value()))
+        if animal is not None:
+            binned_correct = Analysis.binned_performance(animal, int(self.binSizeSpin.value()))
 
-        self.animalPerformanceView.plotItem.clear()
-        self.animalPerformanceView.plotItem.plot(binned_correct)
-        self.animalPerformanceView.setYRange(-0.1, 1.1)
+            self.animalPerformanceView.plotItem.clear()
+            self.animalPerformanceView.plotItem.plot(binned_correct)
+            self.animalPerformanceView.setYRange(-0.1, 1.1)
 
     def current_animal(self):
         try:
