@@ -1,5 +1,6 @@
 import pickle
 import os
+import numpy as np
 
 from PyQt5 import QtWidgets, QtGui
 from Designs import animalWindow, hardwareWindow, prefsWindow, analysisWindow
@@ -200,11 +201,18 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
     def on_animal_selected(self):
         animal = self.current_animal()
         if animal is not None:
-            # binned_correct = Analysis.binned_performance(animal, int(self.binSizeSpin.value()))
+            # binned_correct = Analysis.binned_performance(animal, int(self.binSizeSpin.value())) -
+            # Non-weighted performance
+
             binned_correct = Analysis.weighted_binned_performance(animal, int(self.binSizeSpin.value()))
 
             self.animalPerformanceView.plotItem.clear()
             self.animalPerformanceView.plotItem.plot(binned_correct)
+
+            # Guide lines
+            self.animalPerformanceView.plotItem.plot(np.ones(len(binned_correct)) * 0.5, pen='r')
+            self.animalPerformanceView.plotItem.plot(np.ones(len(binned_correct)) * 0.8, pen='g')
+
             self.animalPerformanceView.setYRange(-0.1, 1.1)
 
     def current_animal(self):
