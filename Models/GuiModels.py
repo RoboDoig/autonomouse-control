@@ -19,9 +19,9 @@ class TableModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.BackgroundRole:
             row = index.row()
             if self.arraydata[row][6]:
-                return QtGui.QBrush(QtCore.Qt.green)
+                return QtGui.QBrush(QtGui.QColor(0, 200, 0, 100))
             else:
-                return QtGui.QBrush(QtCore.Qt.red)
+                return QtGui.QBrush(QtGui.QColor(200, 0, 0, 100))
         elif role != QtCore.Qt.DisplayRole:
             return QtCore.QVariant()
 
