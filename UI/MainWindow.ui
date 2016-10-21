@@ -68,6 +68,11 @@
     </item>
     <item row="1" column="0" colspan="3">
      <widget class="QTableView" name="trialView">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
