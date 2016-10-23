@@ -18,32 +18,10 @@
     <item row="2" column="0">
      <widget class="PlotWidget" name="animalPerformanceView"/>
     </item>
-    <item row="0" column="0">
-     <widget class="QTableWidget" name="experimentStatsTable">
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
-      </property>
-      <column>
-       <property name="text">
-        <string>Animal</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Total Trials</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Trials in Last 24hrs</string>
-       </property>
-      </column>
-     </widget>
+    <item row="2" column="1">
+     <widget class="PlotWidget" name="groupPerformanceView"/>
     </item>
-    <item row="1" column="0">
+    <item row="1" column="0" colspan="2">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string>Parameters</string>
@@ -70,6 +48,31 @@
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QTableWidget" name="experimentStatsTable">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+      <column>
+       <property name="text">
+        <string>Animal</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Total Trials</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Trials in Last 24hrs</string>
+       </property>
+      </column>
      </widget>
     </item>
    </layout>

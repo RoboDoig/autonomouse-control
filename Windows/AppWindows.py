@@ -205,6 +205,10 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
             self.experimentStatsTable.setItem(m, 2, trials_last24h)
 
     def on_animal_selected(self):
+        self.display_animal_performance()
+        self.display_group_performance()
+
+    def display_animal_performance(self):
         animal = self.current_animal()
         if animal is not None:
             # binned_correct = Analysis.binned_performance(animal, int(self.binSizeSpin.value())) -
@@ -220,6 +224,36 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
             self.animalPerformanceView.plotItem.plot(np.ones(len(binned_correct)) * 0.8, pen='g')
 
             self.animalPerformanceView.setYRange(-0.1, 1.1)
+
+    def display_group_performance(self):
+        n_longest = 0
+        all_performance = list()
+        bin_size = int(self.binSizeSpin.value())
+        for animal_id in self.parent.experiment.animal_list.keys():
+            animal = self.parent.experiment.animal_list[animal_id]
+            if animal_id != 'default':
+                this_performance = Analysis.binned_performance(animal, bin_size)
+                all_performance.append(this_performance)
+                if len(this_performance) > n_longest:
+                    n_longest = len(this_performance)
+
+        performance_matrix = np.empty((len(self.parent.experiment.animal_list)-1, n_longest))
+        performance_matrix[:] = np.nan
+
+        for p, perf in enumerate(all_performance):
+            performance_matrix[p][0:len(perf)] = perf
+
+        av_performance = np.nanmean(performance_matrix, 0)
+        std_performance = np.nanstd(performance_matrix, 0)
+
+        self.groupPerformanceView.plotItem.clear()
+        self.groupPerformanceView.plotItem.plot(av_performance)
+        self.groupPerformanceView.plotItem.plot(av_performance + std_performance, pen='m')
+        self.groupPerformanceView.plotItem.plot(av_performance - std_performance, pen='m')
+        # Guide lines
+        self.groupPerformanceView.plotItem.plot(np.ones(len(av_performance)) * 0.5, pen='r')
+        self.groupPerformanceView.plotItem.plot(np.ones(len(av_performance)) * 0.8, pen='g')
+
 
     def current_animal(self):
         try:
