@@ -127,13 +127,14 @@ class MainApp(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
         fname, suff = QtWidgets.QFileDialog.getOpenFileName(self, "Open Experiment", '',
                                                             "AutonoMouse Experiment (*.autmaus)")
 
-        with open(fname, 'rb') as fn:
-            experiment = pickle.load(fn)
+        if fname != '':
+            with open(fname, 'rb') as fn:
+                experiment = pickle.load(fn)
 
-        self.setup_experiment_bindings(experiment)
+            self.setup_experiment_bindings(experiment)
 
-        self.update_experiment_info()
-        self.update_trial_view()
+            self.update_experiment_info()
+            self.update_trial_view()
 
 
 # Back up the reference to the exceptionhook
