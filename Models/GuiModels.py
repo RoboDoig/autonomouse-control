@@ -16,12 +16,13 @@ class TableModel(QtCore.QAbstractTableModel):
     def data(self, index, role):
         if not index.isValid():
             return QtCore.QVariant()
-        elif role == QtCore.Qt.BackgroundRole:
-            row = index.row()
-            if self.arraydata[row][6]:
-                return QtGui.QBrush(QtCore.Qt.green)
-            else:
-                return QtGui.QBrush(QtCore.Qt.red)
+        # TODO - Specific case for main table, colouring true / false correct, doesn't work for animal table
+        # elif role == QtCore.Qt.BackgroundRole:
+        #     row = index.row()
+        #     if self.arraydata[row][6]:
+        #         return QtGui.QBrush(QtCore.Qt.green)
+        #     else:
+        #         return QtGui.QBrush(QtCore.Qt.red)
         elif role != QtCore.Qt.DisplayRole:
             return QtCore.QVariant()
 
