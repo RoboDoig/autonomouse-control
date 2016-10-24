@@ -254,6 +254,7 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
         self.groupPerformanceView.plotItem.plot(np.ones(len(av_performance)) * 0.5, pen='r')
         self.groupPerformanceView.plotItem.plot(np.ones(len(av_performance)) * 0.8, pen='g')
 
+        self.groupPerformanceView.setYRange(-0.1, 1.1)
 
     def current_animal(self):
         try:
