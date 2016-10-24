@@ -6,7 +6,7 @@ import datetime
 from PyQt5 import QtWidgets, QtGui
 from Designs import animalWindow, hardwareWindow, prefsWindow, analysisWindow
 from Models import Experiment, GuiModels
-from Analysis import Analysis
+from Analysis import Analysis, Conversion
 
 
 class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
@@ -189,6 +189,7 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
         self.populate_stats_table()
 
         self.experimentStatsTable.selectionModel().selectionChanged.connect(self.on_animal_selected)
+        self.actionExport_To_MATLAB.triggered.connect(self.convert_to_matlab)
 
     def populate_stats_table(self):
         self.experimentStatsTable.setRowCount(len(self.experiment.animal_list.keys()))
@@ -263,4 +264,11 @@ class AnalysisWindow(QtWidgets.QMainWindow, analysisWindow.Ui_MainWindow):
             return animal
         except:
             return None
+
+    def convert_to_matlab(self):
+        fname, suff = QtWidgets.QFileDialog.getSaveFileName(self, "Export to MATLAB", '', "MATLAB Data (*.mat)")
+        name = os.path.basename(fname)
+        path = os.path.dirname(fname)
+        Conversion.convert_experiment_to_matlab(self.experiment, path, name)
+
 
