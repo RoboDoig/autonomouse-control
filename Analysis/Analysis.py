@@ -29,7 +29,7 @@ def binned_performance(mouse, bin_size):
 
     # then bin according to bin_size
     binned_correct = list()
-    for i in range(1, len(all_correct)):
+    for i in range(1, len(all_correct) + 1):
         if i < bin_size:
             binned_correct.append(np.mean(all_correct[0:i]))
         else:
