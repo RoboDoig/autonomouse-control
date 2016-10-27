@@ -5,28 +5,6 @@ import os
 import pickle
 
 
-# def convert_experiment_to_matlab(experiment, path, name):
-#     """
-#     @type experiment: Experiment.Experiment
-#     """
-#     output = dict()
-#     for animal_id in experiment.animal_list.keys():
-#         this_animal = experiment.animal_list[animal_id]
-#         rewarded = list()
-#         correct = list()
-#         for schedule in this_animal.schedule_list:
-#             for t, trial in enumerate(schedule.trial_list):
-#                 rewarded.append(schedule.schedule_trials[t][0])
-#                 correct.append(trial.correct)
-#
-#         save_id = 'm_' + animal_id
-#         output[save_id] = {'rewarded': rewarded, 'correct': correct}
-#
-#     output = {'data': output}
-#
-#     sio.savemat(path + '/' + name, output)
-
-
 def load_experiment(path):
     data_files = list()
     for file in os.listdir(path):
@@ -40,7 +18,7 @@ def load_experiment(path):
     return experiment, data_files
 
 
-def convert_experiment_to_matlab(experiment, data_files, out_path, out_name):
+def convert_experiment_to_matlab(experiment, data_files, schedule_map, out_path, out_name):
     """
     @type experiment: Experiment.Experiment
     @type out_path: str
@@ -54,8 +32,13 @@ def convert_experiment_to_matlab(experiment, data_files, out_path, out_name):
 
         for schedule in this_animal.schedule_list:
             sched_id = schedule.id.split('.')[0]
+            sched_id = schedule_map[sched_id]
+            match_sched = [sched for sched in output[save_id].keys() if sched_id in sched]
+            sched_id = 's_' + sched_id + '_' + str(len(match_sched) + 1)
+
             output[save_id][sched_id] = {'rewarded': list(), 'correct': list(), 'licked': list(),
-                                         'data_file': list(), 'timestamp': list(), 'analog_data': list()}
+                                         'data_file': list(), 'timestamp': list(),
+                                         'schedule_name': schedule.id.split('.')[0]}
 
             for t, trial in enumerate(schedule.trial_list):
                 time = str(trial.timestamp)
@@ -72,12 +55,19 @@ def convert_experiment_to_matlab(experiment, data_files, out_path, out_name):
                 if len(match_file) > 0:
                     output[save_id][sched_id]['data_file'].append(match_file)
 
-                    output[save_id][sched_id]['analog_data'].append(sio.loadmat(match_file[0]))
-
     output = {out_name: output}
 
     sio.savemat(out_path + out_name, output)
 
+schedule_map = {'Sm_FrontValves_Short': '2Hz_100_12',
+                'Sm_BackValves_Short': '2Hz_100_12',
+                'Sp_FrontValves_Short': '2Hz_100_12',
+                'Sp_BackValves_Short': '2Hz_100_12',
+                'Sm_FrontValves_12hz': '12Hz_300_12',
+                'Sm_BackValves_12hz': '12Hz_300_12',
+                'Sp_FrontValves_12hz': '12Hz_300_12',
+                'Sp_BackValves_12hz': '12Hz_300_12',
+                'Pretrain_3': 'Pretrain'}
 
 e, data_files = load_experiment('G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/')
-convert_experiment_to_matlab(e, data_files, 'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1')
+convert_experiment_to_matlab(e, data_files, schedule_map, 'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1')
