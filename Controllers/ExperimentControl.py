@@ -1,8 +1,5 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-import numpy as np
+from PyQt5 import QtCore, QtWidgets
 from time import sleep, time
-import sys
-import random
 from PyPulse import PulseInterface
 import daqface.DAQ as daq
 from TrialLogic import TrialConditions
@@ -53,7 +50,7 @@ class ExperimentWorker(QtCore.QObject):
                 """ Analyse the lick response """
                 rewarded = current_trial[0]
                 # TODO - reference to rewarded (current_trial[0]) and lick fraction are bug prone here.
-                #  A little too inflexible
+                # TODO - A little too inflexible
                 response = TrialConditions.lick_detect(lick_data, 2, float(current_trial_pulse[0]['lick_fraction']))
                 result, correct, timeout = TrialConditions.trial_result(rewarded, response)
 
@@ -129,7 +126,7 @@ class ExperimentWorker(QtCore.QObject):
                                          'time_axis': time_axis})
 
 
-class ExperimentController():
+class ExperimentController:
     def __init__(self, parent):
         self.parent = parent
         self.thread = QtCore.QThread()
