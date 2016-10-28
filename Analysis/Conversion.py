@@ -4,6 +4,7 @@ from PyPulse import PulseInterface
 import os
 import pickle
 import csv
+import collections as col
 
 
 def load_experiment(path):
@@ -40,13 +41,13 @@ def batch_convert(paths, out_path, out_name):
             this_animal = experiment.animal_list[animal_id]
             save_id = 'maus' + this_animal.id
             if save_id not in output.keys():
-                output[save_id] = dict()
+                output[save_id] = col.OrderedDict()
 
             for schedule in this_animal.schedule_list:
                 sched_id = schedule.id.split('.')[0]
                 sched_id = schedule_map[sched_id]
                 match_sched = [sched for sched in output[save_id].keys() if sched_id in sched]
-                sched_id = 's_' + sched_id + '_' + str(len(match_sched) + 1)
+                sched_id = sched_id + '_' + str(len(match_sched) + 1)
 
                 output[save_id][sched_id] = {'rewarded': list(), 'correct': list(), 'licked': list(),
                                              'data_file': list(), 'timestamp': list(),
@@ -71,6 +72,7 @@ def batch_convert(paths, out_path, out_name):
 
     sio.savemat(out_path + out_name, output)
 
-batch_convert(['G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscriminationControls_UPDATE/',
+batch_convert(['G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscrimination/',
+               'G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscriminationControls_UPDATE/',
                'G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/'],
                'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1')
