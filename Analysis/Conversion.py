@@ -59,15 +59,15 @@ def convert_experiment_to_matlab(experiment, data_files, schedule_map, out_path,
 
     sio.savemat(out_path + out_name, output)
 
-schedule_map = {'Sm_FrontValves_Short': '2Hz_100_12',
-                'Sm_BackValves_Short': '2Hz_100_12',
-                'Sp_FrontValves_Short': '2Hz_100_12',
-                'Sp_BackValves_Short': '2Hz_100_12',
-                'Sm_FrontValves_12hz': '12Hz_300_12',
-                'Sm_BackValves_12hz': '12Hz_300_12',
-                'Sp_FrontValves_12hz': '12Hz_300_12',
-                'Sp_BackValves_12hz': '12Hz_300_12',
-                'Pretrain_3': 'Pretrain'}
-
-e, data_files = load_experiment('G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/')
-convert_experiment_to_matlab(e, data_files, schedule_map, 'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1')
+# schedule_map = {'Sm_FrontValves_Short': '2Hz_100_12',
+#                 'Sm_BackValves_Short': '2Hz_100_12',
+#                 'Sp_FrontValves_Short': '2Hz_100_12',
+#                 'Sp_BackValves_Short': '2Hz_100_12',
+#                 'Sm_FrontValves_12hz': '12Hz_300_12',
+#                 'Sm_BackValves_12hz': '12Hz_300_12',
+#                 'Sp_FrontValves_12hz': '12Hz_300_12',
+#                 'Sp_BackValves_12hz': '12Hz_300_12',
+#                 'Pretrain_3': 'Pretrain'}
+#
+# e, data_files = load_experiment('G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/')
+# convert_experiment_to_matlab(e, data_files, schedule_map, 'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1')
