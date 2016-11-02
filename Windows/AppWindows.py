@@ -84,22 +84,28 @@ class AnimalWindow(QtWidgets.QMainWindow, animalWindow.Ui_MainWindow):
                 self.scheduleTable.setItem(s, 2, progress)
 
     def schedule_selected(self):
-        animal = self.current_animal()
-        schedule = animal.schedule_list[self.current_sched_index()]
+        try:
+            animal = self.current_animal()
+            schedule = animal.schedule_list[self.current_sched_index()]
 
-        self.trialView.setModel(GuiModels.TableModel(schedule.schedule_headers, schedule.schedule_trials, parent=self))
+            self.trialView.setModel(GuiModels.TableModel(schedule.schedule_headers, schedule.schedule_trials, parent=self))
+        except:
+            pass
 
     def add_schedule(self):
         animal = self.current_animal()
         if animal is not None:
-            fname, suff = QtWidgets.QFileDialog.getOpenFileName(self, "Load Schedule", '', '*.schedule')
-            with open(fname, 'rb') as fn:
-                schedule_data = pickle.load(fn)
+            try:
+                fname, suff = QtWidgets.QFileDialog.getOpenFileName(self, "Load Schedule", '', '*.schedule')
+                with open(fname, 'rb') as fn:
+                    schedule_data = pickle.load(fn)
 
-            animal.add_schedule(os.path.basename(fname), schedule_data['schedule'], schedule_data['headers'],
-                                schedule_data['params'])
+                animal.add_schedule(os.path.basename(fname), schedule_data['schedule'], schedule_data['headers'],
+                                    schedule_data['params'])
 
-            self.animal_selected()
+                self.animal_selected()
+            except:
+                pass
 
 
 class HardwareWindow(QtWidgets.QMainWindow, hardwareWindow.Ui_MainWindow):
