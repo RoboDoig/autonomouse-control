@@ -72,7 +72,6 @@ def batch_convert(paths, out_path, out_name):
 
     sio.savemat(out_path + out_name, output)
 
-<<<<<<< HEAD
 # schedule_map = {'Sm_FrontValves_Short': '2Hz_100_12',
 #                 'Sm_BackValves_Short': '2Hz_100_12',
 #                 'Sp_FrontValves_Short': '2Hz_100_12',
@@ -85,9 +84,8 @@ def batch_convert(paths, out_path, out_name):
 #
 # e, data_files = load_experiment('G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/')
 # convert_experiment_to_matlab(e, data_files, schedule_map, 'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1')
-=======
-batch_convert(['G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscrimination/',
-               'G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscriminationControls_UPDATE/',
-               'G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/'],
-               'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1')
->>>>>>> ca5ef831261ccd7a5b0c0c27b49eadd53de1e1ea
+
+# batch_convert(['G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscrimination/',
+#                'G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscriminationControls_UPDATE/',
+#                'G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/'],
+#                'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1')
