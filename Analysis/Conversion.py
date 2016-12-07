@@ -32,9 +32,12 @@ def read_schedule_map(path):
     return schedule_map
 
 
-def batch_convert(paths, out_path, out_name, trial_parameter):
+def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True):
     output = dict()
     for path in paths:
+        if verbose:
+            print('processing: ' + path)
+
         experiment, data_files, schedule_map = load_experiment(path)
 
         for animal_id in experiment.animal_list.keys():
@@ -84,7 +87,8 @@ def convert():
                    'G:/Automated Behaviour/Temp_FineToDelete/ValveSwitchControl12Hz/',
                    'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange/',
                    'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange2/',
-                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange3/'],
+                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange3/',
+                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange4/'],
                    'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1', 8)
 
 if __name__ == '__main__':
