@@ -1,5 +1,6 @@
 import serial
 
+
 def check_rfid(port, n):
     ser = serial.Serial(port,
                         baudrate=9600,
