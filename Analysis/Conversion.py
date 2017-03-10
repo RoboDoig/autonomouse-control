@@ -32,9 +32,12 @@ def read_schedule_map(path):
     return schedule_map
 
 
-def batch_convert(paths, out_path, out_name):
+def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True):
     output = dict()
     for path in paths:
+        if verbose:
+            print('processing: ' + path)
+
         experiment, data_files, schedule_map = load_experiment(path)
 
         for animal_id in experiment.animal_list.keys():
@@ -51,7 +54,8 @@ def batch_convert(paths, out_path, out_name):
 
                 output[save_id][sched_id] = {'rewarded': list(), 'correct': list(), 'licked': list(),
                                              'data_file': list(), 'timestamp': list(),
-                                             'schedule_name': schedule.id.split('.')[0]}
+                                             'schedule_name': schedule.id.split('.')[0],
+                                             'schedule_params': list()}
 
                 for t, trial in enumerate(schedule.trial_list):
                     time = str(trial.timestamp)
@@ -62,6 +66,9 @@ def batch_convert(paths, out_path, out_name):
                     output[save_id][sched_id]['correct'].append(trial.correct)
                     output[save_id][sched_id]['licked'].append(trial.response)
                     output[save_id][sched_id]['timestamp'].append(time)
+
+                    if len(schedule.schedule_trials[t]) > trial_parameter:
+                        output[save_id][sched_id]['schedule_params'].append(schedule.schedule_trials[t][trial_parameter])
 
                     match_file = [file for file in data_files if time in file]
 
@@ -77,8 +84,12 @@ def convert():
     batch_convert(['G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscrimination/',
                    'G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscriminationControls_UPDATE/',
                    'G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/',
-                   'G:/Automated Behaviour/Temp_FineToDelete/ValveSwitchControl12Hz/'],
-                   'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1')
+                   'G:/Automated Behaviour/Temp_FineToDelete/ValveSwitchControl12Hz/',
+                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange/',
+                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange2/',
+                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange3/',
+                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange4/'],
+                   'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1', 8)
 
 if __name__ == '__main__':
     convert()
