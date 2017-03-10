@@ -78,7 +78,7 @@ class ExperimentWorker(QtCore.QObject):
                 print(time() - start)
                 self.trial_end.emit()
 
-            sleep(0.5)
+            sleep(1.0)
 
         self.finished.emit()
 
