@@ -78,7 +78,7 @@ class ExperimentWorker(QtCore.QObject):
                 print(time() - start)
                 self.trial_end.emit()
 
-            sleep(1.0)
+            sleep(3.0)
 
         self.finished.emit()
 
@@ -95,9 +95,12 @@ class ExperimentWorker(QtCore.QObject):
         # animal = random.choice(animals)
 
         animal = rfid.check_rfid(self.hardware_prefs['rfid_port'], 10)
-        if animal in self.experiment.animal_list.keys():
-            return self.experiment.animal_list[animal]
-        else:
+        try:
+            if animal in self.experiment.animal_list.keys():
+                return self.experiment.animal_list[animal]
+            else:
+                return self.experiment.animal_list['default']
+        except:
             return self.experiment.animal_list['default']
 
     def reward(self, animal):

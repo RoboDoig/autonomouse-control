@@ -12,4 +12,9 @@ def check_rfid(port, n):
     if not rfid:
         rfid = b'default'
     ser.close()
-    return rfid.decode()
+    try:
+        out = rfid.decode()
+    except:
+        rfid = b'default'
+        out = rfid.decode()
+    return out
