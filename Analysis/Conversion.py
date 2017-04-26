@@ -81,15 +81,17 @@ def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True):
 
 
 def convert():
-    batch_convert(['G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscrimination/',
-                   'G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscriminationControls_UPDATE/',
-                   'G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/',
-                   'G:/Automated Behaviour/Temp_FineToDelete/ValveSwitchControl12Hz/',
-                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange/',
-                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange2/',
-                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange3/',
-                   'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange4/'],
-                   'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1', 8)
+    # batch_convert(['G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscrimination/',
+    #                'G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscriminationControls_UPDATE/',
+    #                'G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/',
+    #                'G:/Automated Behaviour/Temp_FineToDelete/ValveSwitchControl12Hz/',
+    #                'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange/',
+    #                'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange2/',
+    #                'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange3/',
+    #                'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange4/'],
+    #                'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1', 8)
+
+    batch_convert(['H:/Automated Behaviour/CorrelationStudy2/GNG/'], 'H:/Automated Behaviour/CorrelationStudy2/GNG/', 'GNG', 8)
 
 if __name__ == '__main__':
     convert()
