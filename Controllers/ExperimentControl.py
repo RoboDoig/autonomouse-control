@@ -104,6 +104,8 @@ class ExperimentWorker(QtCore.QObject):
             return self.experiment.animal_list['default']
 
     def reward(self, animal):
+        # TODO - "dev2/ai0" here is a dummy analog input channel, so that analog output can borrow the analog input...
+        # TODO - ...clock - should be changed to be customisable in hardware_prefs before release
         reward.deliver_reward("dev2/ai0", self.hardware_prefs['analog_output'], self.hardware_prefs['sync_clock'],
                               self.hardware_prefs['samp_rate'], animal.water)
 
