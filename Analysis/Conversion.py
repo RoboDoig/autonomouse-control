@@ -4,6 +4,7 @@ from PyPulse import PulseInterface
 import os
 import pickle
 import csv
+import numpy as np
 import collections as col
 
 
@@ -32,7 +33,7 @@ def read_schedule_map(path):
     return schedule_map
 
 
-def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True):
+def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True, save_licks=False):
     output = dict()
     for path in paths:
         if verbose:
@@ -55,7 +56,7 @@ def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True):
                 output[save_id][sched_id] = {'rewarded': list(), 'correct': list(), 'licked': list(),
                                              'data_file': list(), 'timestamp': list(),
                                              'schedule_name': schedule.id.split('.')[0],
-                                             'schedule_params': list()}
+                                             'schedule_params': list(), 'lick_on_times': list()}
 
                 for t, trial in enumerate(schedule.trial_list):
                     time = str(trial.timestamp)
@@ -68,12 +69,26 @@ def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True):
                     output[save_id][sched_id]['timestamp'].append(time)
 
                     if len(schedule.schedule_trials[t]) > trial_parameter:
-                        output[save_id][sched_id]['schedule_params'].append(schedule.schedule_trials[t][trial_parameter])
+                        output[save_id][sched_id]['schedule_params'].append(
+                            schedule.schedule_trials[t][trial_parameter])
 
                     match_file = [file for file in data_files if time in file]
 
-                    if len(match_file) > 0:
-                        output[save_id][sched_id]['data_file'].append(match_file)
+                    if save_licks:
+                        if len(match_file) > 0:
+                            output[save_id][sched_id]['data_file'].append(match_file[0])
+
+                            if save_licks:
+                                # now that we know where the data file is, get the lick data from it. 3 idx is just a known,
+                                # need to change if hardware changes
+                                try:
+                                    lick_data = sio.loadmat(match_file[0])['analog_data'][3]
+                                except:
+                                    lick_data = []
+                                # reduce this data to a set of lick onsets to save storage space
+                                lick_diff = np.diff(lick_data)
+                                lick_onsets = np.where(lick_diff > 0.1)
+                                output[save_id][sched_id]['lick_on_times'].append(lick_onsets)
 
     output = {out_name: output}
 
@@ -81,17 +96,31 @@ def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True):
 
 
 def convert():
-    # batch_convert(['G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscrimination/',
-    #                'G:/Automated Behaviour/Temp_FineToDelete/InitialCorrDiscriminationControls_UPDATE/',
-    #                'G:/Automated Behaviour/Temp_FineToDelete/Final2HzControls/',
-    #                'G:/Automated Behaviour/Temp_FineToDelete/ValveSwitchControl12Hz/',
-    #                'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange/',
-    #                'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange2/',
-    #                'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange3/',
-    #                'G:/Automated Behaviour/Temp_FineToDelete/FrequencyRange4/'],
-    #                'C:/Users/erskina/PycharmProjects/AutonoMouseControl/TestFolder/', 'G1', 8)
+    batch_convert(['I:/Automated Behaviour/CorrelationStudy2/Pretrain/',
+                   'I:/Automated Behaviour/CorrelationStudy2/GNG_5/',
+                   'I:/Automated Behaviour/CorrelationStudy2/InitialCorrDiscrim/',
+                   'I:/Automated Behaviour/CorrelationStudy2/CorrDiscrimControls/',
+                   'I:/Automated Behaviour/CorrelationStudy2/CorrDiscrimControls2/',
+                   'I:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_1/',
+                   'I:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_2/',
+                   'I:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_3/',
+                   'I:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_4/',
+                   'D:/CorrelationStudy2/RandomisedFrequency_5/',
+                   'I:/Automated Behaviour/CorrelationStudy2/StaticTrain/',
+                   'I:/Automated Behaviour/CorrelationStudy2/StaticTrainSwitch/',
+                   'D:/LowHighSwitch/',
+                   'E:/AutomatedBehaviour/CorrelationStudy2/OnsetDisrupt/',
+                   'E:/AutomatedBehaviour/CorrelationStudy2/TrainCNvsACP_2Hz/',
+                   'E:/AutomatedBehaviour/CorrelationStudy2/TrainCNvsACP_10Hz/'],
+                  'C:/Users/ERSKINA/Repos/AutonoMouseDataSets/CorrelationStudy2/', 'allData2', 13, save_licks=False)
 
-    batch_convert(['H:/Automated Behaviour/CorrelationStudy2/GNG/'], 'H:/Automated Behaviour/CorrelationStudy2/GNG/', 'GNG', 8)
+    # batch_convert(['D:/CorrelationStudy2/RandomisedFrequency_5/',
+    #                'H:/Automated Behaviour/CorrelationStudy2/StaticTrain/',
+    #                'H:/Automated Behaviour/CorrelationStudy2/StaticTrainSwitch/'],
+    #               'C:/Users/ERSKINA/Repos/AutonoMouseDataSets/CorrelationStudy2/', 'allData_LickTest', 8, save_licks=True)
+
+    # batch_convert(['H:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_1/'], 'H:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_1/', 'InitRandomHz', 8)
+
 
 if __name__ == '__main__':
     convert()
