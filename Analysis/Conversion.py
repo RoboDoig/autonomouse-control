@@ -74,17 +74,21 @@ def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True, save
 
                     match_file = [file for file in data_files if time in file]
 
-                    if len(match_file) > 0:
-                        output[save_id][sched_id]['data_file'].append(match_file[0])
+                    if save_licks:
+                        if len(match_file) > 0:
+                            output[save_id][sched_id]['data_file'].append(match_file[0])
 
-                        if save_licks:
-                            # now that we know where the data file is, get the lick data from it. 3 idx is just a known,
-                            # need to change if hardware changes
-                            lick_data = sio.loadmat(match_file[0])['analog_data'][3]
-                            # reduce this data to a set of lick onsets to save storage space
-                            lick_diff = np.diff(lick_data)
-                            lick_onsets = np.where(lick_diff > 0.1)
-                            output[save_id][sched_id]['lick_on_times'].append(lick_onsets)
+                            if save_licks:
+                                # now that we know where the data file is, get the lick data from it. 3 idx is just a known,
+                                # need to change if hardware changes
+                                try:
+                                    lick_data = sio.loadmat(match_file[0])['analog_data'][3]
+                                except:
+                                    lick_data = []
+                                # reduce this data to a set of lick onsets to save storage space
+                                lick_diff = np.diff(lick_data)
+                                lick_onsets = np.where(lick_diff > 0.1)
+                                output[save_id][sched_id]['lick_on_times'].append(lick_onsets)
 
     output = {out_name: output}
 
@@ -92,19 +96,28 @@ def batch_convert(paths, out_path, out_name, trial_parameter, verbose=True, save
 
 
 def convert():
-    batch_convert(['H:/Automated Behaviour/CorrelationStudy2/Pretrain/',
-                   'H:/Automated Behaviour/CorrelationStudy2/GNG_5/',
-                   'H:/Automated Behaviour/CorrelationStudy2/InitialCorrDiscrim/',
-                   'H:/Automated Behaviour/CorrelationStudy2/CorrDiscrimControls/',
-                   'H:/Automated Behaviour/CorrelationStudy2/CorrDiscrimControls2/',
-                   'H:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_1/',
-                   'H:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_2/',
-                   'H:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_3/',
-                   'H:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_4/',
-                   'H:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_5/',
-                   'H:/Automated Behaviour/CorrelationStudy2/StaticTrain/',
-                   'H:/Automated Behaviour/CorrelationStudy2/StaticTrainSwitch/'],
-                  'C:/Users/ERSKINA/Repos/AutonoMouseDataSets/CorrelationStudy2/', 'allData', 8)
+    batch_convert(['I:/Automated Behaviour/CorrelationStudy2/Pretrain/',
+                   'I:/Automated Behaviour/CorrelationStudy2/GNG_5/',
+                   'I:/Automated Behaviour/CorrelationStudy2/InitialCorrDiscrim/',
+                   'I:/Automated Behaviour/CorrelationStudy2/CorrDiscrimControls/',
+                   'I:/Automated Behaviour/CorrelationStudy2/CorrDiscrimControls2/',
+                   'I:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_1/',
+                   'I:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_2/',
+                   'I:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_3/',
+                   'I:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_4/',
+                   'D:/CorrelationStudy2/RandomisedFrequency_5/',
+                   'I:/Automated Behaviour/CorrelationStudy2/StaticTrain/',
+                   'I:/Automated Behaviour/CorrelationStudy2/StaticTrainSwitch/',
+                   'D:/LowHighSwitch/',
+                   'E:/AutomatedBehaviour/CorrelationStudy2/OnsetDisrupt/',
+                   'E:/AutomatedBehaviour/CorrelationStudy2/TrainCNvsACP_2Hz/',
+                   'E:/AutomatedBehaviour/CorrelationStudy2/TrainCNvsACP_10Hz/'],
+                  'C:/Users/ERSKINA/Repos/AutonoMouseDataSets/CorrelationStudy2/', 'allData2', 13, save_licks=False)
+
+    # batch_convert(['D:/CorrelationStudy2/RandomisedFrequency_5/',
+    #                'H:/Automated Behaviour/CorrelationStudy2/StaticTrain/',
+    #                'H:/Automated Behaviour/CorrelationStudy2/StaticTrainSwitch/'],
+    #               'C:/Users/ERSKINA/Repos/AutonoMouseDataSets/CorrelationStudy2/', 'allData_LickTest', 8, save_licks=True)
 
     # batch_convert(['H:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_1/'], 'H:/Automated Behaviour/CorrelationStudy2/RandomisedFrequency_1/', 'InitRandomHz', 8)
 
